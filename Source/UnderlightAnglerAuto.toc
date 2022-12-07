@@ -1,5 +1,6 @@
 ## Interface: 100002
 ## Author: Teelo
-## Name: Underlight Angler Auto
+## Title: Underlight Angler Auto
+## X-Curse-Project-ID: 724426
 
 UnderlightAnglerAuto.lua
