@@ -62,7 +62,7 @@ f:SetScript("OnEvent", function(self, event, ...)
             if InCombatLockdown() then return end
             
             -- only do something if the player has Underlight Angler equipped
-            if GetInventoryItemID("player", ProfessionsFrame.CraftingPage.FishingToolSlot:GetID()) ~= 133755 then print("e")return end
+            if GetInventoryItemID("player", ProfessionsFrame.CraftingPage.FishingToolSlot:GetID()) ~= 133755 then return end
             
             
             -- if the player already has the Fishing for Attention buff, do nothing
