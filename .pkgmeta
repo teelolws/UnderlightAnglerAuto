@@ -1,0 +1,9 @@
+package-as: UnderlightAnglerAuto
+
+move-folders:
+ UnderlightAnglerAuto/Source: UnderlightAnglerAuto
+
+ignore:
+ - LICENCE.md
+ - README.md
+ - mklink.bat
