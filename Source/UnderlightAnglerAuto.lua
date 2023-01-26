@@ -1,5 +1,5 @@
 local f = CreateFrame("Frame")
-f:RegisterEvent("BAG_UPDATE_DELAYED")
+f:RegisterEvent("BAG_UPDATE")
 f:RegisterEvent("MOUNT_JOURNAL_USABILITY_CHANGED")
 f:RegisterEvent("PLAYER_REGEN_ENABLED")
 
@@ -44,7 +44,7 @@ end
 local throttle = GetTime()
 
 f:SetScript("OnEvent", function(self, event, ...)
-    if event == "BAG_UPDATE_DELAYED" then
+    if event == "BAG_UPDATE" then
         if bagID and slotID then
             if InCombatLockdown() then return end
             reequipUA()
