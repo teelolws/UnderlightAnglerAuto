@@ -3,6 +3,7 @@ f:RegisterEvent("BAG_UPDATE")
 f:RegisterEvent("MOUNT_JOURNAL_USABILITY_CHANGED")
 f:RegisterEvent("PLAYER_REGEN_ENABLED")
 f:RegisterEvent("CHAT_MSG_LOOT")
+f:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
 
 -- Check Blizzard_Professions\Blizzard_ProfessionsCrafting.xml for changes to this
 -- FishingToolSlot
@@ -11,6 +12,14 @@ f:RegisterEvent("CHAT_MSG_LOOT")
 local FISHINGTOOLSLOT = 28
 
 local bagID, slotID
+
+local attentionBuffSetByAddon
+local function cancelAttentionBuff()
+    if not C_UnitAuras.GetPlayerAuraBySpellID(394009) then return end
+    if InCombatLockdown() then return end
+    CancelSpellByName("Fishing For Attention")
+    attentionBuffSetByAddon = nil
+end
 
 local function unequipUA()
     if InCombatLockdown() or C_ChallengeMode.IsChallengeModeActive() then return end
@@ -48,11 +57,15 @@ local function reequipUA()
     PickupInventoryItem(FISHINGTOOLSLOT)
     
     bagID, slotID = nil
+    attentionBuffSetByAddon = true
 end
 
 local throttle = GetTime()
 
 f:SetScript("OnEvent", function(self, event, ...)
+    if (event == "PLAYER_MOUNT_DISPLAY_CHANGED") and InCombatLockdown() then
+        attentionBuffSetByAddon = nil
+    end
     if InCombatLockdown() or C_ChallengeMode.IsChallengeModeActive() then return end
     
     if event == "BAG_UPDATE" then
@@ -83,6 +96,10 @@ f:SetScript("OnEvent", function(self, event, ...)
         if C_UnitAuras.GetPlayerAuraBySpellID(394009) then return end
         if IsSwimming() then
             unequipUA()
+        end
+    elseif event == "PLAYER_MOUNT_DISPLAY_CHANGED" then
+        if attentionBuffSetByAddon then
+            cancelAttentionBuff()
         end
     end
 end)
