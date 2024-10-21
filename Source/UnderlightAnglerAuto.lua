@@ -11,13 +11,19 @@ f:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
 -- As of 10.2 I will no longer load in Blizzard_Professions and get this KeyValue due to lua errors from not fully loading in Blizzard_Professions
 local FISHINGTOOLSLOT = 28
 
+local FISHINGTOOLITEMIDS = {
+    [133755] = true, -- Underlight Angler
+    [44050] = true, -- Mastercraft Kalu'ak Fishing Pole
+}
+
 local bagID, slotID
 
 local attentionBuffSetByAddon
 local function cancelAttentionBuff()
-    if not C_UnitAuras.GetPlayerAuraBySpellID(394009) then return end
+    local info = C_UnitAuras.GetPlayerAuraBySpellID(394009)
+    if not info then return end
     if InCombatLockdown() then return end
-    CancelSpellByName("Fishing For Attention")
+    CancelSpellByName(info.name)
     attentionBuffSetByAddon = nil
 end
 
@@ -79,7 +85,7 @@ f:SetScript("OnEvent", function(self, event, ...)
             if (throttle + 1) > GetTime() then return end
             
             -- only do something if the player has Underlight Angler equipped
-            if GetInventoryItemID("player", FISHINGTOOLSLOT) ~= 133755 then return end
+            if not FISHINGTOOLITEMIDS[GetInventoryItemID("player", FISHINGTOOLSLOT)] then return end
             
             -- if the player already has the Fishing for Attention buff, do nothing
             if C_UnitAuras.GetPlayerAuraBySpellID(394009) then return end
@@ -92,7 +98,7 @@ f:SetScript("OnEvent", function(self, event, ...)
     elseif (event == "PLAYER_REGEN_ENABLED") and bagID and slotID then
         reequipUA()
     elseif (event == "PLAYER_REGEN_ENABLED") or (event == "CHAT_MSG_LOOT") then
-        if GetInventoryItemID("player", FISHINGTOOLSLOT) ~= 133755 then return end
+        if not FISHINGTOOLITEMIDS[GetInventoryItemID("player", FISHINGTOOLSLOT)] then return end
         if C_UnitAuras.GetPlayerAuraBySpellID(394009) then return end
         if IsSwimming() then
             unequipUA()
