@@ -14,6 +14,7 @@ local FISHINGTOOLSLOT = 28
 local FISHINGTOOLITEMIDS = {
     [133755] = true, -- Underlight Angler
     [44050] = true, -- Mastercraft Kalu'ak Fishing Pole
+    [244790] = true, -- The Coiled Huntress
 }
 
 local bagID, slotID
